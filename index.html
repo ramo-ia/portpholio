@@ -165,12 +165,17 @@
                     </div>
                     <h3>Mission 2 - Framework Laravel</h3>
                     <p>Apprentissage approfondi du framework Laravel avec création d'applications web dynamiques et gestion de bases de données avancée.</p>
+                    <div class="project-gallery">
+                        <img src="image/mission 2/Capture-decran-2026-03-26-101010.png" alt="Mission 2 - Capture 1" class="gallery-thumb">
+                        <img src="image/mission 2/Capture-decran-2026-03-26-101030.png" alt="Mission 2 - Capture 2" class="gallery-thumb">
+                        <img src="image/mission 2/Capture-decran-2026-03-26-101050.png" alt="Mission 2 - Capture 3" class="gallery-thumb">
+                    </div>
                     <div class="project-tags">
                         <span class="tag">Laravel</span>
                         <span class="tag">PHP</span>
                         <span class="tag">MySQL</span>
                     </div>
-                    <a href="#contact" class="project-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                    <a href="#" class="project-link open-mission2">Voir les captures <i class="fas fa-arrow-right"></i></a>
                 </div>
 
                 <div class="project-card">
@@ -213,12 +218,17 @@
                     </div>
                     <h3>Stage 2 - Automatisation N8N Dantoncoeur</h3>
                     <p>Stage chez Dantoncoeur : automatisation de workflows et processus métier avec la plateforme N8N pour optimiser l'efficacité opérationnelle.</p>
+                    <div class="project-gallery">
+                        <img src="image/N8N automatisation/azda.png" alt="N8N 1" class="gallery-thumb">
+                        <img src="image/N8N automatisation/Capture d\'écran 2026-02-27 141248.png" alt="N8N 2" class="gallery-thumb">
+                        <img src="image/N8N automatisation/Capture d\'écran 2026-03-05 141347.png" alt="N8N 3" class="gallery-thumb">
+                    </div>
                     <div class="project-tags">
                         <span class="tag">N8N</span>
                         <span class="tag">Automatisation</span>
                         <span class="tag">Workflows</span>
                     </div>
-                    <a href="#contact" class="project-link">Découvrir <i class="fas fa-arrow-right"></i></a>
+                    <a href="#" class="project-link open-stage2">Voir les captures <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -251,6 +261,34 @@
                 <button id="stage1-next-image" class="modal-arrow">&#10095;</button>
             </div>
             <div class="modal-thumbnails" id="stage1-modal-thumbnails"></div>
+        </div>
+    </div>
+    <!-- Mission 2 Modal -->
+    <div id="mission2-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="mission2-modal-close" class="modal-close"><i class="fas fa-times"></i></button>
+            <h3>Mission 2 - Framework Laravel</h3>
+            <p>Captures d'écran du projet Laravel</p>
+            <div class="modal-gallery">
+                <button id="mission2-prev-image" class="modal-arrow">&#10094;</button>
+                <img id="mission2-image" src="" alt="Capture Mission 2">
+                <button id="mission2-next-image" class="modal-arrow">&#10095;</button>
+            </div>
+            <div class="modal-thumbnails" id="mission2-modal-thumbnails"></div>
+        </div>
+    </div>
+    <!-- Stage 2 Modal -->
+    <div id="stage2-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="stage2-modal-close" class="modal-close"><i class="fas fa-times"></i></button>
+            <h3>Stage 2 - Automatisation N8N</h3>
+            <p>Captures d'écran de l'automatisation N8N</p>
+            <div class="modal-gallery">
+                <button id="stage2-prev-image" class="modal-arrow">&#10094;</button>
+                <img id="stage2-image" src="" alt="Capture Stage 2">
+                <button id="stage2-next-image" class="modal-arrow">&#10095;</button>
+            </div>
+            <div class="modal-thumbnails" id="stage2-modal-thumbnails"></div>
         </div>
     </div>
 
@@ -812,6 +850,180 @@
             });
         }
 
+        function initMission2Modal() {
+            const modal = document.getElementById('mission2-modal');
+            const openButtons = document.querySelectorAll('.open-mission2');
+            const closeButton = document.getElementById('mission2-modal-close');
+            const mainImage = document.getElementById('mission2-image');
+            const thumbnailsContainer = document.getElementById('mission2-modal-thumbnails');
+            const prev = document.getElementById('mission2-prev-image');
+            const next = document.getElementById('mission2-next-image');
+
+            const makeSafeUrl = (path) => path.split('/').map(segment => encodeURIComponent(segment)).join('/');
+
+            const images = [
+                'image/mission 2/Capture-decran-2026-03-26-101010.png',
+                'image/mission 2/Capture-decran-2026-03-26-101030.png',
+                'image/mission 2/Capture-decran-2026-03-26-101050.png'
+            ].map(path => makeSafeUrl(path));
+
+            let currentIndex = 0;
+
+            thumbnailsContainer.innerHTML = images.map((src, index) => {
+                const active = index === 0 ? ' active' : '';
+                return `<img class="thumb${active}" src="${src}" data-index="${index}" alt="Miniature ${index + 1}">`;
+            }).join('');
+
+            const thumbs = thumbnailsContainer.querySelectorAll('.thumb');
+
+            const updateImage = (index) => {
+                currentIndex = index;
+                mainImage.onerror = () => {
+                    mainImage.alt = 'Image introuvable : ' + images[currentIndex];
+                    mainImage.src = '';
+                };
+                mainImage.src = images[currentIndex];
+                thumbs.forEach((thumb, i) => {
+                    thumb.classList.toggle('active', i === currentIndex);
+                });
+            };
+
+            openButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    updateImage(0);
+                });
+            });
+
+            const mission2Card = Array.from(document.querySelectorAll('.project-card')).find(card => {
+                const title = card.querySelector('h3');
+                return title && title.textContent.includes('Mission 2 - Framework Laravel');
+            });
+
+            if (mission2Card) {
+                mission2Card.addEventListener('click', (event) => {
+                    if (!event.target.closest('a')) {
+                        modal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                        updateImage(0);
+                    }
+                });
+            }
+
+            closeButton.addEventListener('click', () => {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            prev.addEventListener('click', () => {
+                updateImage((currentIndex - 1 + images.length) % images.length);
+            });
+
+            next.addEventListener('click', () => {
+                updateImage((currentIndex + 1) % images.length);
+            });
+
+            thumbs.forEach((thumb, i) => {
+                thumb.addEventListener('click', () => updateImage(i));
+            });
+        }
+
+        function initStage2Modal() {
+            const modal = document.getElementById('stage2-modal');
+            const openButtons = document.querySelectorAll('.open-stage2');
+            const closeButton = document.getElementById('stage2-modal-close');
+            const mainImage = document.getElementById('stage2-image');
+            const thumbnailsContainer = document.getElementById('stage2-modal-thumbnails');
+            const prev = document.getElementById('stage2-prev-image');
+            const next = document.getElementById('stage2-next-image');
+
+            const makeSafeUrl = (path) => path.split('/').map(segment => encodeURIComponent(segment)).join('/');
+
+            const images = [
+                'image/N8N automatisation/azda.png',
+                'image/N8N automatisation/Capture d\'écran 2026-02-27 141248.png',
+                'image/N8N automatisation/Capture d\'écran 2026-03-05 141347.png'
+            ].map(path => makeSafeUrl(path));
+
+            let currentIndex = 0;
+
+            thumbnailsContainer.innerHTML = images.map((src, index) => {
+                const active = index === 0 ? ' active' : '';
+                return `<img class="thumb${active}" src="${src}" data-index="${index}" alt="Miniature ${index + 1}">`;
+            }).join('');
+
+            const thumbs = thumbnailsContainer.querySelectorAll('.thumb');
+
+            const updateImage = (index) => {
+                currentIndex = index;
+                mainImage.onerror = () => {
+                    mainImage.alt = 'Image introuvable : ' + images[currentIndex];
+                    mainImage.src = '';
+                };
+                mainImage.src = images[currentIndex];
+                thumbs.forEach((thumb, i) => {
+                    thumb.classList.toggle('active', i === currentIndex);
+                });
+            };
+
+            openButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    updateImage(0);
+                });
+            });
+
+            const stage2Card = Array.from(document.querySelectorAll('.project-card')).find(card => {
+                const title = card.querySelector('h3');
+                return title && title.textContent.includes('Automatisation N8N');
+            });
+
+            if (stage2Card) {
+                stage2Card.addEventListener('click', (event) => {
+                    if (!event.target.closest('a')) {
+                        modal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                        updateImage(0);
+                    }
+                });
+            }
+
+            closeButton.addEventListener('click', () => {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            prev.addEventListener('click', () => {
+                updateImage((currentIndex - 1 + images.length) % images.length);
+            });
+
+            next.addEventListener('click', () => {
+                updateImage((currentIndex + 1) % images.length);
+            });
+
+            thumbs.forEach((thumb, i) => {
+                thumb.addEventListener('click', () => updateImage(i));
+            });
+        }
+
         // Initialisation de toutes les animations
         document.addEventListener('DOMContentLoaded', () => {
             initHeroAnimations();
@@ -824,6 +1036,8 @@
             initContactForm();
             initMission3Modal();
             initStage1Modal();
+            initMission2Modal();
+            initStage2Modal();
         });
 
         // Optimisation des performances
